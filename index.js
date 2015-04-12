@@ -128,7 +128,6 @@ module.exports = React.createClass({
     }
 
     var noscript = { __html: '<noscript><img src="'+this.state.fallback+'"></noscript>' }
-
     return (
       <div className="image-container" style={containerStyle}>
         <div className="image" style={imageStyle} dangerouslySetInnerHTML={noscript} />
