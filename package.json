@@ -1,0 +1,27 @@
+{
+  "name": "ainojs-react-image",
+  "version": "1.0.0",
+  "description": "Lazy image component",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aino/ainojs-react-image"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aino/ainojs-react-image/issues"
+  },
+  "homepage": "https://github.com/aino/ainojs-react-image",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --check-leaks"
+  },
+  "author": "Aino",
+  "devDependencies": {
+    "chai": "^2.1.2",
+    "mocha": "^2.2.1",
+    "react": "^0.13.1"
+  },
+  "dependencies": {
+    "ainojs-dimensions": "^1.0.4"
+  }
+}
