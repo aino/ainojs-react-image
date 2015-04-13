@@ -133,16 +133,25 @@ module.exports = React.createClass({
         left: 0
       }
     } else {
-      classNames.push('loading')
+      classNames.push(this.state.shouldload ? 'loading' : 'waiting')
     }
+    if ( this.props.lazy )
+      classNames.push('lazy')
 
-    var noscript = { __html: '<noscript><img src="'+this.state.fallback+'"></noscript>' }
+    var noscriptStyles = 'width:100%'
+    if ( this.state.padding )
+      noscriptStyles += ';position:absolute;top:0;left:0'
+
+    var fallback = { __html: '<img src="'+this.state.fallback+'" style="'+noscriptStyles+'" alt="'+(this.props.alt || "")+'">' }
+
+    var noscript = React.createElement('noscript', { 
+      dangerouslySetInnerHTML: fallback 
+    })
 
     var img = React.createElement('div', {
       className: 'image', 
-      style: imageStyle, 
-      dangerouslySetInnerHTML: noscript
-    })
+      style: imageStyle
+    }, noscript)
 
     return React.createElement('div', {
       className: classNames.join(' '), 

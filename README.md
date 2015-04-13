@@ -15,4 +15,4 @@ Lazyloads responsive images based on resolution.
       200: "http://galleria.io/static/i/s2013/2s.jpg"
     }
 
-    <ImageComponent src={images} lazy={true} ratio={114/200} />
+    <ImageComponent src={images} lazy={true} ratio={114/200} alt="Snorkel" />
