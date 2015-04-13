@@ -69,7 +69,7 @@ module.exports = React.createClass({
   },
 
   load: function() {
-    if ( this.state.shouldload ) {
+    if ( this.isMounted() && this.state.shouldload ) {
       var img = new Image()
       img.onload = this.onImageLoad
       img.src = this.state.display
@@ -79,7 +79,7 @@ module.exports = React.createClass({
   onScroll: function(e) {
     if ( isNode )
       return
-    if ( this.state.shouldload ) {
+    if ( this.state.shouldload || !this.isMounted() ) {
       this.removeScrollListener()
       return
     }
@@ -105,6 +105,8 @@ module.exports = React.createClass({
   },
 
   onImageLoad: function(e) {
+    if ( !this.isMounted() )
+      return
     this.setState({
       loading: false,
       padding: this.state.padding || Math.round(e.target.height/e.target.width*10000)/100
