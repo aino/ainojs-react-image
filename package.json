@@ -22,6 +22,6 @@
     "react": "^0.13.1"
   },
   "dependencies": {
-    "ainojs-dimensions": "^1.0.4"
+    "ainojs-dimensions": "^1.1.0"
   }
 }
