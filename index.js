@@ -136,10 +136,16 @@ module.exports = React.createClass({
     }
 
     var noscript = { __html: '<noscript><img src="'+this.state.fallback+'"></noscript>' }
-    return (
-      <div className={classNames.join(' ')} style={containerStyle}>
-        <div className="image" style={imageStyle} dangerouslySetInnerHTML={noscript} />
-      </div>
-    )
+
+    var img = React.createElement('div', {
+      className: 'image', 
+      style: imageStyle, 
+      dangerouslySetInnerHTML: noscript
+    })
+
+    return React.createElement('div', {
+      className: classNames.join(' '), 
+      style: containerStyle
+    }, img)
   }
 })
