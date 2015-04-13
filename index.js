@@ -31,11 +31,12 @@ module.exports = React.createClass({
   },
 
   getImage: function(width) {
-    if ( typeof this.props.src == 'string' )
-      return this.props.src
-    else if ( Object.prototype.toString.call(this.props.src) == '[object Object]' ) {
-      var sizes = Object.keys(this.props.src)
-      return this.props.src[findSize(sizes, width*pixelRatio)]
+    var src = this.props.src
+    if ( typeof src == 'string' )
+      return src
+    else if ( Object.prototype.toString.call(src) == '[object Object]' ) {
+      var sizes = Object.keys(src)
+      return src[findSize(sizes, width*pixelRatio)]
     } else {
       throw new TypeError('"src" must be a string or object')
     }
