@@ -3,13 +3,15 @@
 var React = require('react')
 var Dimensions = require('ainojs-dimensions')
 
-var findClosest = function(array, num) {
-  array = array.sort(function(a, b) {
-    return a - b
+var findSize = function(array, num) {
+  array = array.map(function(n) {
+    return parseInt(n, 10)
+  }).sort(function(a, b) {
+    return a-b
   })
-  var i = array.length
-  var ans = array[0]
-  while( i-- && num < array[i] )
+  var i = 0
+  var ans = array[i]
+  while( num > array[i] && array[i++] )
     ans = array[i]
   return ans
 }
@@ -24,18 +26,19 @@ module.exports = React.createClass({
       display: '',
       fallback: '',
       padding: 0,
-      shouldLoad: false
+      shouldload: false
     }
   },
 
   getImage: function(width) {
-    if ( this.props.image )
-      return this.props.image
-    else if ( this.props.images ) {
-      var sizes = Object.keys(this.props.images)
-      return this.props.images[findClosest(sizes, width*pixelRatio)]
+    if ( typeof this.props.src == 'string' )
+      return this.props.src
+    else if ( Object.prototype.toString.call(this.props.src) == '[object Object]' ) {
+      var sizes = Object.keys(this.props.src)
+      return this.props.src[findSize(sizes, width*pixelRatio)]
+    } else {
+      throw new TypeError('"src" must be a string or object')
     }
-    return '#'
   },
 
   componentWillMount: function() {
@@ -95,18 +98,15 @@ module.exports = React.createClass({
   },
 
   onImageLoad: function(e) {
-    var padding = this.state.padding
-    if (!padding) {
-      padding = Math.round(e.target.height/e.target.width*10000)/100
-    }
     this.setState({
       loading: false,
-      padding: padding
+      padding: this.state.padding || Math.round(e.target.height/e.target.width*10000)/100
     })
   },
 
   render: function() {
 
+    var classNames = ['image-container']
     var imageStyle = {}
     var containerStyle = {
       paddingBottom: this.state.padding+'%',
@@ -125,11 +125,13 @@ module.exports = React.createClass({
         top: 0,
         left: 0
       }
+    } else {
+      classNames.push('loading')
     }
 
     var noscript = { __html: '<noscript><img src="'+this.state.fallback+'"></noscript>' }
     return (
-      <div className="image-container" style={containerStyle}>
+      <div className={classNames.join(' ')} style={containerStyle}>
         <div className="image" style={imageStyle} dangerouslySetInnerHTML={noscript} />
       </div>
     )

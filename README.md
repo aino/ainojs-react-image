@@ -2,9 +2,17 @@
 
 Lazyloads responsive images based on resolution.
 
+## Plain image without lazy:
+
+    <ImageComponent src="http://galleria.io/static/i/s2013/2m.jpg" ratio={114/200} />
+
+``ratio`` can be omitted but is recomended or your component will not know it’s height until the image is loaded
+
+## Lazyload resolution-dependent image:
+
     var images = {
       800: "http://galleria.io/static/i/s2013/2m.jpg", 
       200: "http://galleria.io/static/i/s2013/2s.jpg"
     }
 
-    <ImageComponent images={images} lazy={true} ratio={114/200} />
+    <ImageComponent src={images} lazy={true} ratio={114/200} />
