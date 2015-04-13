@@ -2,6 +2,7 @@
 
 var React = require('react')
 var Dimensions = require('ainojs-dimensions')
+var isNode = typeof window == 'undefined'
 
 var findSize = function(array, num) {
   array = array.map(function(n) {
@@ -16,7 +17,7 @@ var findSize = function(array, num) {
   return ans
 }
 
-var pixelRatio = window.devicePixelRatio || 1
+var pixelRatio = isNode ? 1 : window.devicePixelRatio || 1
 
 module.exports = React.createClass({
 
@@ -53,7 +54,7 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function() {
-    if ( this.props.lazy ) {
+    if ( this.props.lazy && !isNode ) {
        window.addEventListener('scroll', this.onScroll)
     }
     var width = Dimensions(this.getDOMNode().parentNode).width
@@ -75,6 +76,8 @@ module.exports = React.createClass({
   },
 
   onScroll: function(e) {
+    if ( isNode )
+      return
     if ( this.state.shouldload ) {
       this.removeScrollListener()
       return
@@ -91,6 +94,8 @@ module.exports = React.createClass({
   },
 
   removeScrollListener: function() {
+    if (isNode)
+      return
     window.removeEventListener('scroll', this.onScroll)
   },
 
