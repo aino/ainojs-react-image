@@ -57,7 +57,8 @@ module.exports = React.createClass({
     if ( this.props.lazy && !isNode ) {
        window.addEventListener('scroll', this.onScroll)
     }
-    var width = Dimensions(this.getDOMNode().parentNode).width
+    var parent = this.getDOMNode().parentNode
+    var width = parent.getBoundingClientRect().width
     this.setState({
       display: this.getImage(width),
       shouldload: !this.props.lazy,
@@ -82,9 +83,9 @@ module.exports = React.createClass({
       this.removeScrollListener()
       return
     }
-    var dim = Dimensions(this.getDOMNode())
-    var top = dim.top
-    var bottom = top+dim.height
+    var rect = this.getDOMNode().getBoundingClientRect()
+    var top = rect.top
+    var bottom = top+rect.height
     var scrolled = document.body.scrollTop
     var height = window.innerHeight
     if ( bottom > scrolled && top < scrolled+height )
