@@ -34,6 +34,7 @@ module.exports = React.createClass({
   getDefaultProps: function() {
     return {
       alt: '',
+      threshold: isNode && window.navigator.userAgent.match(/iPhone/i) ? 500 : 50,
       onLoad: function(){}
     }
   },
@@ -91,11 +92,7 @@ module.exports = React.createClass({
       return
     }
     var rect = this.getDOMNode().getBoundingClientRect()
-    var top = rect.top
-    var bottom = top+rect.height
-    var scrolled = document.body.scrollTop
-    var height = window.innerHeight
-    if ( bottom > scrolled && top < scrolled+height )
+    if ( rect.bottom > -this.props.threshold && rect.top < window.innerHeight+this.props.threshold )
       this.setState({
         shouldload: true
       }, this.load)
