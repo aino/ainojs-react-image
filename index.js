@@ -23,11 +23,12 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      loading: false,
+      loading: true,
       display: '',
       fallback: '',
       padding: 0,
-      shouldload: false
+      shouldload: false,
+      lazy: false
     }
   },
 
@@ -57,22 +58,22 @@ module.exports = React.createClass({
       padding = Math.round(this.props.ratio*10000)/100
     this.setState({
       fallback: this.getImage(500),
-      padding: padding
+      padding: padding,
+      lazy: isNode ? false : this.props.lazy // no lazy load for node
     })
   },
 
   componentDidMount: function() {
-    if ( this.props.lazy && !isNode ) {
+    if ( this.state.lazy ) {
        window.addEventListener('scroll', this.onScroll)
+       if ( !this.props.ratio )
+        console.warn('Lazy loading images without a ratio is not recommended and might fail')
     }
-    if ( this.props.lazy && !this.props.ratio )
-      console.warn('Lazy loading images without a ratio is not recommended and might fail')
     var parent = this.getDOMNode().parentNode
     var width = parent.getBoundingClientRect().width
     this.setState({
       display: this.getImage(width),
-      shouldload: !this.props.lazy,
-      loading: true
+      shouldload: !this.state.lazy,
     }, function() {
       this.onScroll()
       this.load()
@@ -88,8 +89,6 @@ module.exports = React.createClass({
   },
 
   onScroll: function(e) {
-    if ( isNode )
-      return
     if ( this.state.shouldload || !this.isMounted() ) {
       this.removeScrollListener()
       return
@@ -146,7 +145,7 @@ module.exports = React.createClass({
     } else {
       classNames.push(this.state.shouldload ? 'loading' : 'waiting')
     }
-    if ( this.props.lazy )
+    if ( this.state.lazy )
       classNames.push('lazy')
 
     var noscriptStyles = 'width:100%'
