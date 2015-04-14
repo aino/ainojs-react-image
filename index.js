@@ -12,8 +12,9 @@ var findSize = function(array, num) {
   })
   var i = 0
   var ans = array[i]
-  while( num > array[i] && array[i++] )
-    ans = array[i]
+  while( array[i] && num > array[i] ) {
+    ans = array[++i]
+  }
   return ans
 }
 
@@ -152,16 +153,13 @@ module.exports = React.createClass({
     if ( this.state.padding )
       noscriptStyles += ';position:absolute;top:0;left:0'
 
-    var fallback = { __html: '<img src="'+this.state.fallback+'" style="'+noscriptStyles+'" alt="'+this.props.alt+'">' }
-
-    var noscript = React.createElement('noscript', { 
-      dangerouslySetInnerHTML: fallback 
-    })
+    var noscript = { __html: '<noscript><img src="'+this.state.fallback+'" style="'+noscriptStyles+'" alt="'+this.props.alt+'"></noscript>' }
 
     var img = React.createElement('div', {
       className: 'image', 
-      style: imageStyle
-    }, noscript)
+      style: imageStyle,
+      dangerouslySetInnerHTML: noscript
+    })
 
     return React.createElement('div', {
       className: classNames.join(' '), 
