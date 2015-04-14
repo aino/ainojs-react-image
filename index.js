@@ -31,6 +31,13 @@ module.exports = React.createClass({
     }
   },
 
+  getDefaultProps: function() {
+    return {
+      alt: '',
+      onLoad: function(){}
+    }
+  },
+
   getImage: function(width) {
     var src = this.props.src
     if ( typeof src == 'string' )
@@ -110,7 +117,7 @@ module.exports = React.createClass({
     this.setState({
       loading: false,
       padding: this.state.padding || Math.round(e.target.height/e.target.width*10000)/100
-    })
+    }, this.props.onLoad)
   },
 
   render: function() {
@@ -144,7 +151,7 @@ module.exports = React.createClass({
     if ( this.state.padding )
       noscriptStyles += ';position:absolute;top:0;left:0'
 
-    var fallback = { __html: '<img src="'+this.state.fallback+'" style="'+noscriptStyles+'" alt="'+(this.props.alt || "")+'">' }
+    var fallback = { __html: '<img src="'+this.state.fallback+'" style="'+noscriptStyles+'" alt="'+this.props.alt+'">' }
 
     var noscript = React.createElement('noscript', { 
       dangerouslySetInnerHTML: fallback 
