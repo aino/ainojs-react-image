@@ -23,7 +23,7 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      loading: true,
+      loading: false,
       display: '',
       fallback: '',
       padding: 0,
@@ -72,6 +72,7 @@ module.exports = React.createClass({
     this.setState({
       display: this.getImage(width),
       shouldload: !this.props.lazy,
+      loading: true
     }, function() {
       this.onScroll()
       this.load()
