@@ -117,7 +117,9 @@ module.exports = React.createClass({
     this.setState({
       loading: false,
       padding: this.state.padding || Math.round(e.target.height/e.target.width*10000)/100
-    }, this.props.onLoad)
+    }, function() {
+      this.props.onLoad(e.target)
+    })
   },
 
   render: function() {

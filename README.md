@@ -16,3 +16,13 @@ Lazyloads responsive images based on resolution.
     }
 
     <ImageComponent src={images} lazy={true} ratio={114/200} alt="Snorkel" />
+
+## Run a function when the image has loaded and is displayed:
+
+    onImageLoad: function(imgElement) {
+      console.log(imgElement)
+    }
+
+    [...]
+
+    <ImageComponent src={images} lazy={true} ratio={114/200} onLoad={this.onImageLoad} />
