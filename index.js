@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require('react')
-var Dimensions = require('ainojs-dimensions')
+
 var isNode = typeof window == 'undefined'
 
 var findSize = function(array, num) {
