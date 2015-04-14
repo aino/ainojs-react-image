@@ -34,7 +34,7 @@ module.exports = React.createClass({
   getDefaultProps: function() {
     return {
       alt: '',
-      threshold: isNode && window.navigator.userAgent.match(/iPhone/i) ? 500 : 50,
+      threshold: (!isNode && window.navigator.userAgent.match(/iPhone/i)) ? 500 : 50,
       onLoad: function(){}
     }
   },
