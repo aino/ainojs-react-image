@@ -12,8 +12,9 @@ var findSize = function(array, num) {
   })
   var i = 0
   var ans = array[i]
-  while( num > array[i] && array[i++] )
-    ans = array[i]
+  while( array[i] && num > array[i] ) {
+    ans = array[++i]
+  }
   return ans
 }
 
@@ -132,40 +133,30 @@ module.exports = React.createClass({
 
     if (!this.state.loading) {
       imageStyle = {
-        backgroundImage: 'url('+this.state.display+')',
-        backgroundSize: 'cover',
-        backgroundPosition: '50% 50%',
-        backgroundRepeat: 'no-repeat',
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        top: 0,
-        left: 0
+        backgroundImage: 'url('+this.state.display+')'
       }
+      classNames.push('ready')
     } else if ( this.state.display ) {
       classNames.push(this.state.shouldload ? 'loading' : 'waiting')
     }
+
     if ( this.props.lazy )
       classNames.push('lazy')
 
-    var noscriptStyles = 'width:100%'
     if ( this.state.padding )
-      noscriptStyles += ';position:absolute;top:0;left:0'
+      classNames.push('padding')
 
-    var fallback = { __html: '<img src="'+this.state.fallback+'" style="'+noscriptStyles+'" alt="'+this.props.alt+'">' }
-
-    var noscript = React.createElement('noscript', { 
-      dangerouslySetInnerHTML: fallback 
-    })
+    var noscript = { __html: '<noscript><img src="'+this.state.fallback+'" alt="'+this.props.alt+'"></noscript>' }
 
     var img = React.createElement('div', {
       className: 'image', 
-      style: imageStyle
-    }, noscript)
+      style: imageStyle,
+      dangerouslySetInnerHTML: noscript
+    })
 
     return React.createElement('div', {
       className: classNames.join(' '), 
       style: containerStyle
-    }, img)
+    }, thumbnail, img)
   }
 })
