@@ -13,7 +13,8 @@ var findSize = function(array, num) {
   var i = 0
   var ans = array[i]
   while( array[i] && num > array[i] ) {
-    ans = array[++i]
+    ans = array[i]
+    i++
   }
   return ans
 }
