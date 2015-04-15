@@ -157,6 +157,6 @@ module.exports = React.createClass({
     return React.createElement('div', {
       className: classNames.join(' '), 
       style: containerStyle
-    }, thumbnail, img)
+    }, img)
   }
 })
