@@ -134,7 +134,7 @@ module.exports = React.createClass({
 
     if (!this.state.loading) {
       imageStyle = {
-        backgroundImage: 'url('+this.state.display+')' + this.props.extra ? ', url('+this.props.extra+')' : ''
+        backgroundImage: 'url('+this.state.display+')' + ( this.props.extra ? ', url('+this.props.extra+')' : '' )
       }
       classNames.push('ready')
     } else if ( this.state.display ) {
