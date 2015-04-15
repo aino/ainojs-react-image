@@ -69,10 +69,11 @@ module.exports = React.createClass({
     }
     if ( this.props.lazy && !this.props.ratio )
       console.warn('Lazy loading images without a ratio is not recommended and might fail')
-    var parent = this.getDOMNode().parentNode
-    var width = parent.getBoundingClientRect().width
+    var display = this.getImage(this.getDOMNode().parentNode.getBoundingClientRect().width)
+    if ( this.props.extra )
+      display += ','+this.props.extra
     this.setState({
-      display: this.getImage(width),
+      display: display,
       shouldload: !this.props.lazy,
     }, function() {
       this.onScroll()
