@@ -163,7 +163,4 @@ module.exports = React.createClass({
       style: containerStyle
     }, img)
   }
-})tyle
-    }, img)
-  }
 })
