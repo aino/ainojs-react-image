@@ -10,16 +10,15 @@ var findSize = function(array, num) {
   }).sort(function(a, b) {
     return a-b
   })
-  var i = 0
-  var ans = array[i]
-  while( array[i] && num > array[i] ) {
-    ans = array[i]
-    i++
-  }
+  var ans
+  array.some(function(a) {
+    ans = a
+    return a > num 
+  })
   return ans
 }
 
-var pixelRatio = isNode ? 1 : window.devicePixelRatio || 1
+var pixelRatio = isNode ? 1 : Math.min(1.5, window.devicePixelRatio) || 1
 
 module.exports = React.createClass({
 
@@ -37,7 +36,8 @@ module.exports = React.createClass({
     return {
       alt: '',
       threshold: (!isNode && window.navigator.userAgent.match(/iPhone/i)) ? 500 : 50,
-      onLoad: function(){}
+      onLoad: function(){},
+      onBeforeLoad: function(){}
     }
   },
 
@@ -87,6 +87,7 @@ module.exports = React.createClass({
       var img = new Image()
       img.onload = this.onImageLoad
       img.src = this.state.display
+      this.props.onBeforeLoad(img)
     }
   },
 
