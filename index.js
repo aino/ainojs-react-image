@@ -129,10 +129,6 @@ module.exports = React.createClass({
 
     var classNames = ['image-container']
     var imageStyle = {}
-    var containerStyle = {
-      paddingBottom: this.state.padding+'%',
-      position: 'relative'
-    }
 
     if (!this.state.loading) {
       imageStyle = {
@@ -159,7 +155,7 @@ module.exports = React.createClass({
 
     return React.createElement('div', {
       className: classNames.join(' '), 
-      style: containerStyle
+      style: { paddingBottom: this.state.padding+'%' }
     }, img)
   }
 })
