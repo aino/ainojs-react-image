@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var React = require('react')
 
 var isNode = typeof window == 'undefined'
@@ -28,7 +26,8 @@ module.exports = React.createClass({
       display: '',
       fallback: '',
       padding: 0,
-      shouldload: false
+      shouldload: false,
+      error: false
     }
   },
 
@@ -37,7 +36,9 @@ module.exports = React.createClass({
       alt: '',
       threshold: (!isNode && window.navigator.userAgent.match(/iPhone/i)) ? 500 : 50,
       onLoad: function(){},
-      onBeforeLoad: function(){}
+      onBeforeLoad: function(){},
+      onError: function(){},
+      timeout: 3000
     }
   },
 
@@ -49,7 +50,7 @@ module.exports = React.createClass({
       var sizes = Object.keys(src)
       return src[findSize(sizes, width*pixelRatio)]
     } else {
-      throw new TypeError('"src" must be a string or object')
+      throw new TypeError('"src" must be a string or an object')
     }
   },
 
@@ -82,13 +83,26 @@ module.exports = React.createClass({
     })
   },
 
+  loadTimer: null,
+
   load: function() {
     if ( this.isMounted() && this.state.shouldload ) {
       var img = new Image()
       img.onload = this.onImageLoad
+      img.onError = this.onImageError
       img.src = this.state.display
+      this.loadTimer = setTimeout(function() {
+        img.onload = null
+        this.onImageError({target: img})
+      }.bind(this), this.props.timeout)
       this.props.onBeforeLoad(img)
     }
+  },
+
+  onImageError: function(e) {
+    this.setState({ error: true }, function() {
+      this.props.onError(e.target)
+    })
   },
 
   onScroll: function(e) {
@@ -145,6 +159,9 @@ module.exports = React.createClass({
 
     if ( this.state.padding )
       classNames.push('padding')
+
+    if ( this.state.error )
+      classNames.push('error')
 
     var noscript = { __html: '<noscript><img src="'+this.state.fallback+'" alt="'+this.props.alt+'"></noscript>' }
 

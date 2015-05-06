@@ -26,3 +26,13 @@ Lazyloads responsive images based on resolution.
     [...]
 
     <ImageComponent src={images} lazy={true} ratio={114/200} onLoad={this.onImageLoad} />
+
+  ## Run a function when the image fails to load (defaults to 3000ms, you can set timeout as prop)
+
+      onImageError: function(imgElement) {
+        console.log('error', imgElement)
+      }
+
+      [...]
+
+      <ImageComponent src={images} lazy={true} ratio={114/200} onError={this.onImageError} />
