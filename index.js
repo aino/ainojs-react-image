@@ -100,6 +100,8 @@ module.exports = React.createClass({
   },
 
   onImageError: function(e) {
+    if ( !this.isMounted() )
+      return
     this.setState({ error: true }, function() {
       this.props.onError(e.target)
     })
@@ -127,6 +129,7 @@ module.exports = React.createClass({
 
   componentWillUnmount: function() {
     this.removeScrollListener()
+    clearTimeout(this.loadTimer)
   },
 
   onImageLoad: function(e) {
