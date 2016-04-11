@@ -28,7 +28,8 @@ module.exports = React.createClass({
       fallback: '',
       padding: 0,
       shouldload: false,
-      mounted: false
+      mounted: false,
+      error: false
     }
   },
 
@@ -36,7 +37,10 @@ module.exports = React.createClass({
     return {
       alt: '',
       threshold: (!isNode && window.navigator.userAgent.match(/iPhone/i)) ? 500 : 50,
-      onLoad: () => {}
+      onLoad: () => {},
+      onBeforeLoad: () => {},
+      onError: () => {},
+      timeout: 3000
     }
   },
 
@@ -50,7 +54,7 @@ module.exports = React.createClass({
       let m = width * Math.max(1, ratio)
       return src[findSize(sizes, (m*pixelRatio))]
     } else {
-      throw new TypeError('"src" must be a string or object')
+      throw new TypeError('"src" must be a string or an object')
     }
   },
 
@@ -67,6 +71,7 @@ module.exports = React.createClass({
   },
 
   componentDidMount() {
+    this.loadtimer = null
     this.setState({
       mounted: true
     })
@@ -94,6 +99,7 @@ module.exports = React.createClass({
   componentWillReceiveProps(nextProps) {
     if ( JSON.stringify(this.props.src) != JSON.stringify(nextProps.src)) {
       this.setState({
+        error: false,
         display: this.getImage(this.imageNode.parentNode.getBoundingClientRect().width, nextProps.src),
       }, this.load)
     }
@@ -108,11 +114,26 @@ module.exports = React.createClass({
     if ( this.isMounted() && this.state.shouldload ) {
       var img = new Image()
       img.onload = this.onImageLoad
+      img.onError = this.onImageError
       img.src = this.state.display
+      clearTimeout(this.loadTimer)
+      this.loadTimer = setTimeout(() => {
+        img.onload = null
+        this.onImageError({target: img})
+      }, this.props.timeout)
+      this.props.onBeforeLoad(img)
     }
   },
 
-  onScroll() {
+  onImageError(e) {
+    if ( !this.isMounted() )
+      return
+    this.setState({ error: true }, () => {
+      this.props.onError(e.target)
+    })
+  },
+
+  onScroll(e) {
     if ( isNode )
       return
     if ( this.state.shouldload || !this.isMounted() ) {
@@ -146,9 +167,11 @@ module.exports = React.createClass({
   componentWillUnmount() {
     this.removeScrollListener()
     window.removeEventListener('orientationchange', this.onOrientationChange)
+    clearTimeout(this.loadTimer)
   },
 
   onImageLoad(e) {
+    clearTimeout(this.loadTimer)
     if ( !this.isMounted() )
       return
     this.setState({
@@ -195,6 +218,9 @@ module.exports = React.createClass({
 
     if ( this.props.className )
       classNames.push(this.props.className)
+
+    if ( this.state.error )
+      classNames.push('error')
 
     var noscript = { __html: '<noscript><img src="'+this.state.fallback+'" alt="'+this.props.alt+'"></noscript>' }
 
