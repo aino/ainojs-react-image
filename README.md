@@ -26,3 +26,14 @@ Lazyloads responsive images based on resolution.
     [...]
 
     <ImageComponent src={images} lazy={true} ratio={114/200} onLoad={this.onImageLoad} />
+
+## All properties:
+
+- **src** (String or Object) Image source URL or an object of sizes and URLs (se above).
+- **alt** (String) Alt text for the generated ``<img>`` tag.
+- **lazy** (Boolean) Toggles lazy load.
+- **ratio** (Number) Sets the image ratio (height/width).
+- **blendImage** (String) Adds another blended image, useful for texture backgrounds.
+- **blendMode** (String) Sets image blend mode for browsers that supports it.
+- **threshold** (Number) Defines the amount of pixels below/above the screen for the image to show on lazy load.
+- **onLoad** (Function) Function that runs when the image has loaded. First argument is the image node.
